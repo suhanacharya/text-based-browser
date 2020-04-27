@@ -37,15 +37,21 @@ Twitter and Square Chief Executive Officer Jack Dorsey
 '''
 
 dir_command = args[1]
+
+# Creates a local directory in your machine to store data
 try:
     os.mkdir(dir_command)
 except IOError:
     pass
 
+# Stores already visited tabs
 tabs = []
+
+# Stores websites in the world
 websites = ["bloomberg", "nytimes"]
 history = []
 
+# Browser interaction starts here
 while True:
     command = input()
     if "." in command:
@@ -54,6 +60,7 @@ while True:
         print(command)
         file_dir = dir_command + "/" + command + ".txt"
 
+        # If command was url to website 0
         if command == websites[0]:
             print(bloomberg_com)
             if command not in tabs:
@@ -61,6 +68,8 @@ while True:
             with open(file_dir, "w") as file:
                 file.write(bloomberg_com)
                 history.append(file_dir)
+
+        # If command was url to website 1
         elif command == websites[1]:
             print(nytimes_com)
             if command not in tabs:
@@ -71,11 +80,13 @@ while True:
         else:
             print("error")
 
+    # Command to go back one page
     elif command == "back":
         history.pop()
         with open(history.pop(), "r") as file:
             print(file.read())
 
+    # Saves visited pages in local machine, and saves history
     elif command in tabs:
         file_dir = dir_command + "/" + command + ".txt"
         with open(file_dir, "r") as file:
