@@ -17,7 +17,6 @@ Jessica Wade has added nearly 700 Wikipedia biographies for
  years.
 
 '''
-
 bloomberg_com = '''
 The Space Race: From Apollo 11 to Elon Musk
 
@@ -37,46 +36,53 @@ Twitter and Square Chief Executive Officer Jack Dorsey
  Tuesday, a signal of the strong ties between the Silicon Valley giants.
 '''
 
-# write your code here
-
-dir_url = args[1]
-
+dir_command = args[1]
 try:
-    os.mkdir(dir_url)
+    os.mkdir(dir_command)
 except IOError:
     pass
 
 tabs = []
-
 websites = ["bloomberg", "nytimes"]
+history = []
 
 while True:
-    url = input()
-    if "." in url:
+    command = input()
+    if "." in command:
 
-        url = url.rstrip(".com")
-        print(url)
-        tabs_location =  dir_url + "/" + url + ".txt"
+        command = command.rstrip(".com")
+        print(command)
+        file_dir = dir_command + "/" + command + ".txt"
 
-        if url == websites[0]:
+        if command == websites[0]:
             print(bloomberg_com)
-            if url not in tabs:
-                tabs.append(url)
-            with open(tabs_location, "w") as file:
+            if command not in tabs:
+                tabs.append(command)
+            with open(file_dir, "w") as file:
                 file.write(bloomberg_com)
-        elif url == websites[1]:
+                history.append(file_dir)
+        elif command == websites[1]:
             print(nytimes_com)
-            if url not in tabs:
-                tabs.append(url)
-            with open(tabs_location, "w") as file:
+            if command not in tabs:
+                tabs.append(command)
+            with open(file_dir, "w") as file:
                 file.write(nytimes_com)
+                history.append(file_dir)
         else:
             print("error")
-    elif url in tabs:
-        with open(dir_url + "/" + url + ".txt", "r") as file:
+
+    elif command == "back":
+        history.pop()
+        with open(history.pop(), "r") as file:
             print(file.read())
 
-    elif url == "exit":
+    elif command in tabs:
+        file_dir = dir_command + "/" + command + ".txt"
+        with open(file_dir, "r") as file:
+            print(file.read())
+            history.append(file_dir)
+
+    elif command == "exit":
         break
     else:
         print("error")
