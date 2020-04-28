@@ -1,5 +1,6 @@
 import sys
 import os
+import requests
 args = sys.argv
 
 nytimes_com = '''
@@ -51,31 +52,35 @@ tabs = []
 websites = ["bloomberg", "nytimes"]
 history = []
 
+
+def isurl(string):
+    if string.endswith(".com") or string.endswith(".org"):
+        return True
+    else:
+        return False
+
+
+def get_response(url):
+    r = requests.get("https://" + url)
+
+    return r
+
+
 # Browser interaction starts here
 while True:
     command = input()
-    if "." in command:
-
-        command = command.rstrip(".com")
-        print(command)
-        file_dir = dir_command + "/" + command + ".txt"
-
-        # If command was url to website 0
-        if command == websites[0]:
-            print(bloomberg_com)
+    if isurl(command):
+        response = get_response(command)
+        if response:
+            command = command.rstrip(".com")
+            command = command.rstrip(".org")
+            file_dir = dir_command + "/" + command + ".txt"
+            web_content = response.text
+            print(web_content)
             if command not in tabs:
                 tabs.append(command)
             with open(file_dir, "w") as file:
-                file.write(bloomberg_com)
-                history.append(file_dir)
-
-        # If command was url to website 1
-        elif command == websites[1]:
-            print(nytimes_com)
-            if command not in tabs:
-                tabs.append(command)
-            with open(file_dir, "w") as file:
-                file.write(nytimes_com)
+                file.write(web_content)
                 history.append(file_dir)
         else:
             print("error")
