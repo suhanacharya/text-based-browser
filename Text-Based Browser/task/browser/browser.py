@@ -1,6 +1,8 @@
 import sys
 import os
 import requests
+from bs4 import BeautifulSoup
+
 args = sys.argv
 
 nytimes_com = '''
@@ -68,18 +70,18 @@ def get_response(url):
 
 # Browser interaction starts here
 while True:
-    command = input()
+    command = input('> ')
     if isurl(command):
         response = get_response(command)
         if response:
+            soup = BeautifulSoup(response.content, "html.parser")
             command = command.rstrip(".com")
-            command = command.rstrip(".org")
             file_dir = dir_command + "/" + command + ".txt"
-            web_content = response.text
+            web_content = soup.text
             print(web_content)
             if command not in tabs:
                 tabs.append(command)
-            with open(file_dir, "w") as file:
+            with open(file_dir, "w", encoding="utf-8") as file:
                 file.write(web_content)
                 history.append(file_dir)
         else:
