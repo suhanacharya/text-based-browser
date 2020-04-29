@@ -77,7 +77,16 @@ while True:
             soup = BeautifulSoup(response.content, "html.parser")
             command = command.rstrip(".com")
             file_dir = dir_command + "/" + command + ".txt"
-            web_content = soup.text
+
+            data_rows = []
+            tags = ['p', 'ul', 'ol', 'a', 'li', 'h1',
+                    'h2', 'h3', 'h4', 'h5', 'h6']
+
+            for tag in soup.find_all(tags):
+                data_rows.append(tag.get_text())
+
+            web_content = ''.join(data_rows)
+
             print(web_content)
             if command not in tabs:
                 tabs.append(command)
