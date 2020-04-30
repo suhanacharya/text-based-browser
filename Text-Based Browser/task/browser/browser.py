@@ -2,6 +2,7 @@ import sys
 import os
 import requests
 from bs4 import BeautifulSoup
+from colorama import Fore, init
 
 args = sys.argv
 
@@ -69,6 +70,8 @@ def get_response(url):
 
 
 # Browser interaction starts here
+
+init(autoreset=True)
 while True:
     command = input('> ')
     if isurl(command):
@@ -79,13 +82,14 @@ while True:
             file_dir = dir_command + "/" + command + ".txt"
 
             data_rows = []
-            tags = ['p', 'ul', 'ol', 'a', 'li', 'h1',
-                    'h2', 'h3', 'h4', 'h5', 'h6']
-
+            tags = ['a', 'p', 'ul', 'ol', 'li']
             for tag in soup.find_all(tags):
-                data_rows.append(tag.get_text())
+                if tag.name == 'a':
+                    data_rows.append(Fore.BLUE + tag.get_text() + Fore.RESET)
+                else:
+                    data_rows.append(tag.get_text())
 
-            web_content = ''.join(data_rows)
+            web_content = '\n'.join(data_rows)
 
             print(web_content)
             if command not in tabs:
